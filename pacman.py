@@ -302,9 +302,6 @@ class Ghost(Player):
               self.rect.top=old_y
        
     # Change the speed of the ghost
-    
-
-    #ここの下がどうなってるのかわからない
 
           # ゴーストの移動処理
           #ghost.changespeed(list, ghost, turn, steps, l, k)
