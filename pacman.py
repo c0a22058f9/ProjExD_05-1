@@ -656,7 +656,7 @@ def startGame():
       monsta_list.draw(screen)
 
       text=font.render("Score: "+str(score)+"/"+str(bll), True, red)
-      screen.blit(text, [10, 10])
+     
 
       nums = []       # 奇数×10の数が入る空リストを作成
       nums1 = []      # 奇数×10の数が入る空リストを作成
@@ -669,7 +669,7 @@ def startGame():
       for i in range(len(nums)):   
         if score > nums1[i] and score < nums[i]:  #関数draw_rectを呼び出す条件
           draw_rect(screen, score, i)
-
+      screen.blit(text, [10, 10])
 
 
       if score == bll:
