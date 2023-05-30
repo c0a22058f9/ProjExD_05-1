@@ -14,8 +14,8 @@ purple = (255,0,255) #紫
 yellow   = ( 255, 255,   0) #黄
 kkk = 1
 
-Trollicon=pygame.image.load('images/pacman.png') #pacmanの画像を読み込む
-pygame.display.set_icon(Trollicon) #ウィンドウに表示されるシステムアイコンを変更します。
+icon=pygame.image.load('images/pacman.png') #pacmanの画像を読み込む
+pygame.display.set_icon(icon) #ウィンドウに表示されるシステムアイコンを変更します。
 
 #Add music
 pygame.mixer.init() #mixerモジュールを初期化します
@@ -151,10 +151,23 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
    
         # Set height, width
-        self.image = pygame.image.load(filename).convert()
+        
         # pygame.image.load(filename).convert() を使用して画像を読み込みます。convert() メソッドは画像のピクセルフォーマットを変換し、描画速度を向上させます。
         # Make our top-left corner the passed-in location.
         #左上隅を渡された場所にします。
+        img = pygame.image.load(filename)
+        if filename == "images/pacman.png":
+          self.imgs = {
+            "0":img,                                      #右
+            "1":pygame.transform.rotozoom(img, 90, 1.0),  #上
+            "2":pygame.transform.rotozoom(img, 180, 1.0),  #左
+            "3":pygame.transform.rotozoom(img, 270, 1.0),  #下
+          }
+          
+          self.dire = "0"
+          self.image = self.imgs[self.dire]
+        else:
+           self.image = img
         self.rect = self.image.get_rect() #self.rect には画像の矩形領域が格納されます。
         self.rect.top = y
         self.rect.left = x
@@ -172,6 +185,10 @@ class Player(pygame.sprite.Sprite):
     def changespeed(self,x,y):
         self.change_x+=x
         self.change_y+=y
+
+    def changeimg(self, dire, screen):
+       self.image = self.imgs[dire]
+       screen.blit(self.image, self.rect)
           
     # Find a new position for the player
     def update(self,walls,gate):
@@ -567,21 +584,25 @@ def startGame():
 
           if event.type == pygame.KEYDOWN:
               if event.key == pygame.K_LEFT:
+                  Player.changeimg(Pacman,"2",screen)
                   if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
                       Pacman.changespeed(-60, 0)  # LSHIFTキーを押しながら左キーでスピード増加
                   else:
                       Pacman.changespeed(-30, 0)
               elif event.key == pygame.K_RIGHT:
+                  Player.changeimg(Pacman,"0",screen)
                   if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
                       Pacman.changespeed(60, 0)  # LSHIFTキーを押しながら右キーでスピード増加
                   else:
                       Pacman.changespeed(30, 0)
               elif event.key == pygame.K_UP:
+                  Player.changeimg(Pacman,"1",screen)
                   if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
                       Pacman.changespeed(0, -60)  # LSHIFTキーを押しながら上キーでスピード増加
                   else:
                       Pacman.changespeed(0, -30)
               elif event.key == pygame.K_DOWN:
+                  Player.changeimg(Pacman,"3",screen)
                   if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
                       Pacman.changespeed(0, 60)  # LSHIFTキーを押しながら下キーでスピード増加
                   else:
