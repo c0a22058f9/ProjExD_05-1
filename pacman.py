@@ -44,10 +44,10 @@ def setupRoomOne(all_sprites_list):
     wall_list=pygame.sprite.RenderPlain() #壁でマップを作成するリスト
      
     # This is a list of walls. Each is in the form [x, y, width, height]
-    walls = [ [0,0,6,600],
-              [0,0,600,6],
-              [0,600,606,6],
-              [600,0,6,606],
+    walls = [ [-30,-30,36,630],  #左
+              [-30,-30,630,36],  #上
+              [-30,600,660,36],  #右
+              [600,-30,36,660],  #下
               [300,0,6,66],
               [60,60,186,6],
               [360,60,186,6],
