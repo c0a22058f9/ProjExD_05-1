@@ -557,6 +557,8 @@ def startGame():
 
   i = 0
 
+  t_flag = False   # トロールのフラグ
+
   while done == False:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
       for event in pygame.event.get():
@@ -584,6 +586,23 @@ def startGame():
                       Pacman.changespeed(0, 60)  # LSHIFTキーを押しながら下キーでスピード増加
                   else:
                       Pacman.changespeed(0, 30)
+              if event.key == pygame.K_j:
+                  if t_flag == False:
+                    for i in range(10):
+                      Troll=Ghost( (i*60+19), (i*60+19) , "images/Trollman.png" )
+                      monsta_list.add(Troll)
+                      all_sprites_list.add(Troll)
+                  
+                      Troll=Ghost( 2*w-(i*60+19), (i*60+19) , "images/Trollman.png" )
+                      monsta_list.add(Troll)
+                      all_sprites_list.add(Troll)
+                    t_flag = True
+                  
+                  else:
+                    for i in range(20):
+                      monsta_list.remove(monsta_list.sprites()[-1])
+                      all_sprites_list.remove(all_sprites_list.sprites()[-1])
+                    t_flag = False
 
           if event.type == pygame.KEYUP:
               if event.key == pygame.K_LEFT:
