@@ -289,7 +289,7 @@ class Ghost(Player):
         #turnは多分方向転換のためのおっきいほうのリスト
         
         if steps < z:
-          if kkk > 0:          
+          if kkk > 0:          #kkkが1だったらkkkは（0or1）
              self.change_x=list[turn][0] #リストの0つ目の値 playerの速度をリストの0つ目にする
              self.change_y=list[turn][1] #リストの1つ目の値 playerの速度をリストの1つ目にする
              steps+=1
@@ -315,9 +315,9 @@ class Ghost(Player):
          
 
 Pinky_directions =[
-[0,-30,4],
-[15,0,9],
-[0,15,11],
+[0,-30,4],    #下に4回進む
+[15,0,9],     #右に9回進む
+[0,15,11],    #上に11回進む
 [-15,0,23],
 [0,15,7],
 [15,0,3],
@@ -334,27 +334,6 @@ Pinky_directions =[
 [0,-15,11],
 [15,0,9]
 ]
-
-"""[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4],
-[0,-30,4]"""
-
-
 
 Blinky_directions = [
 [0,-15,4],
@@ -582,10 +561,10 @@ def startGame():
                   Pacman.changespeed(0,30)
 
               if event.key == pygame.K_SPACE:
-                if score >= 40:                             ##ゲーム中にキーボードを押したら
-                    score -= 40
+                if score >= 40:             #もしスコアが40以上だったら              ##ゲーム中にキーボードを押したら
+                    score -= 40             #スコアを40消費する
                     kkk = 0
-                    stop_life = 50
+                    stop_life = 50           #stop_lifeを50にする
 
 
           if event.type == pygame.KEYUP:
