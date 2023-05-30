@@ -2,6 +2,7 @@
 #https://github.com/hbokmann/Pacman
   
 import pygame
+import random
 
   
 black = (0,0,0) #黒
@@ -218,6 +219,18 @@ class Player(pygame.sprite.Sprite):
           if gate_hit:
             self.rect.left=old_x
             self.rect.top=old_y
+    def teleport(self, width, height):
+      """
+      テレポート機能に関するメソッド
+      引数1:ランダムな位置の幅の範囲
+      引数2:ランダムな位置の高さの範囲
+      """
+      while True:
+        self.rect.x = random.randrange(18, width-30, 30)  #通路の真ん中にpacmanが来るように最低値を18に設定
+        self.rect.y = random.randrange(18, height-30, 30)
+        if not((self.rect.x >= 258 and self.rect.x <= 348)\
+          and (self.rect.y == 258)):  #迷路の真ん中にある小部屋に入らないための条件分岐
+          break
 
 #Inheritime Player klassist
 #class Ghost(Player):
@@ -559,6 +572,14 @@ def startGame():
                   Pacman.changespeed(0,-30)
               if event.key == pygame.K_DOWN:
                   Pacman.changespeed(0,30)
+
+              if event.key == pygame.K_t:  #Tキーが押されたときの処理（テレポート）
+                  while True:
+                     Pacman.teleport(screen.get_width(), screen.get_height())  #テレポート位置を画面の幅と高さのランダムな位置に指定
+                     pac_collide = pygame.sprite.spritecollide(Pacman, wall_list, False)  #pacmanと壁の衝突判定
+                     pg_collide = pygame.sprite.spritecollide(Pacman, gate, False)  #pacmanと扉の衝突判定
+                     if (not pac_collide) and (not pg_collide):  #壁と扉に当たっていなければbreak、そうでなければ繰り返す
+                        break
 
               if event.key == pygame.K_SPACE:
                 if score >= 40:             #もしスコアが40以上だったら              ##ゲーム中にキーボードを押したら
