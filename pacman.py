@@ -631,7 +631,8 @@ def startGame():
                      Pacman.teleport(screen.get_width(), screen.get_height())  #テレポート位置を画面の幅と高さのランダムな位置に指定
                      pac_collide = pygame.sprite.spritecollide(Pacman, wall_list, False)  #pacmanと壁の衝突判定
                      pg_collide = pygame.sprite.spritecollide(Pacman, gate, False)  #pacmanと扉の衝突判定
-                     if (not pac_collide) and (not pg_collide):  #壁と扉に当たっていなければbreak、そうでなければ繰り返す
+                     pghost_collide = pygame.sprite.spritecollide(Pacman, monsta_list, False) 
+                     if (not pac_collide) and (not pg_collide) and (not pghost_collide):  #壁と扉とゴーストに当たっていなければbreak、そうでなければ繰り返す
                         break
 
               if event.key == pygame.K_SPACE:
