@@ -740,7 +740,7 @@ def startGame():
       screen.blit(text, [10, 10])
 
 
-      if score == bll:
+      if len(block_list) == 0:
         doNext("Congratulations, you won!",145,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
 
       monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
