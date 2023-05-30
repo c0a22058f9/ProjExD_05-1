@@ -637,6 +637,20 @@ def startGame():
       text=font.render("Score: "+str(score)+"/"+str(bll), True, red)
       screen.blit(text, [10, 10])
 
+      nums = []       # 奇数×10の数が入る空リストを作成
+      nums1 = []      # 奇数×10の数が入る空リストを作成
+      for i in range(22): #偶数、奇数のリストにそれぞれ分類する
+         if i%2 ==0:
+            nums1.append(i*10)
+         else:
+            nums.append(i*10)
+      # print(nums, nums1)
+      for i in range(len(nums)):   
+        if score > nums1[i] and score < nums[i]:  #関数draw_rectを呼び出す条件
+          draw_rect(screen, score, i)
+
+
+
       if score == bll:
         doNext("Congratulations, you won!",145,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
 
@@ -650,6 +664,14 @@ def startGame():
       pygame.display.flip()
     
       clock.tick(10)
+
+#投下画像を呼び出す関数
+def draw_rect(screen, score, i):
+  if i < 5:
+    pygame.draw.rect(screen, (0, 0, 0), (score*i, score/2, 100, 100*score))
+  else:
+    pygame.draw.rect(screen, (0, 0, 0), (score*(i*0.01), score, 100, 100*score))
+
 
 def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate):
   while True:
