@@ -579,6 +579,11 @@ def startGame():
           if event.type == pygame.QUIT:
               done=True
 
+          time = pygame.time.get_ticks()
+
+          if time % 1000 >= 500:
+            Pacman.image = pygame.image.load("images/pacman_fullmoon.png")
+
           if event.type == pygame.KEYDOWN:
               if event.key == pygame.K_LEFT:
                   Player.changeimg(Pacman,"2",screen)
