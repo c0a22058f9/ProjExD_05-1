@@ -44,10 +44,10 @@ def setupRoomOne(all_sprites_list):
     wall_list=pygame.sprite.RenderPlain() #壁でマップを作成するリスト
      
     # This is a list of walls. Each is in the form [x, y, width, height]
-    walls = [ [0,0,6,600],
-              [0,0,600,6],
-              [0,600,606,6],
-              [600,0,6,606],
+    walls = [ [-30,-30,36,630],  #左
+              [-30,-30,630,36],  #上
+              [-30,600,660,36],  #右
+              [600,-30,36,660],  #下
               [300,0,6,66],
               [60,60,186,6],
               [360,60,186,6],
@@ -557,6 +557,8 @@ def startGame():
 
   i = 0
 
+  t_flag = False   # トロールのフラグ
+
   while done == False:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
       for event in pygame.event.get():
@@ -565,20 +567,72 @@ def startGame():
 
           if event.type == pygame.KEYDOWN:
               if event.key == pygame.K_LEFT:
-                  Pacman.changespeed(-30,0)
-              if event.key == pygame.K_RIGHT:
-                  Pacman.changespeed(30,0)
-              if event.key == pygame.K_UP:
-                  Pacman.changespeed(0,-30)
-              if event.key == pygame.K_DOWN:
-                  Pacman.changespeed(0,30)
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(-60, 0)  # LSHIFTキーを押しながら左キーでスピード増加
+                  else:
+                      Pacman.changespeed(-30, 0)
+              elif event.key == pygame.K_RIGHT:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(60, 0)  # LSHIFTキーを押しながら右キーでスピード増加
+                  else:
+                      Pacman.changespeed(30, 0)
+              elif event.key == pygame.K_UP:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(0, -60)  # LSHIFTキーを押しながら上キーでスピード増加
+                  else:
+                      Pacman.changespeed(0, -30)
+              elif event.key == pygame.K_DOWN:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(0, 60)  # LSHIFTキーを押しながら下キーでスピード増加
+                  else:
+                      Pacman.changespeed(0, 30)
+              if event.key == pygame.K_j:
+                  if t_flag == False:
+                    for i in range(10):
+                      Troll=Ghost( (i*60+19), (i*60+19) , "images/Trollman.png" )
+                      monsta_list.add(Troll)
+                      all_sprites_list.add(Troll)
+                  
+                      Troll=Ghost( 2*w-(i*60+19), (i*60+19) , "images/Trollman.png" )
+                      monsta_list.add(Troll)
+                      all_sprites_list.add(Troll)
+                    t_flag = True
+                  
+                  else:
+                    for i in range(20):
+                      monsta_list.remove(monsta_list.sprites()[-1])
+                      all_sprites_list.remove(all_sprites_list.sprites()[-1])
+                    t_flag = False
+
+          if event.type == pygame.KEYUP:
+              if event.key == pygame.K_LEFT:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(60, 0)  # LSHIFTキーを押しながら左キーを離すとスピード減少
+                  else:
+                      Pacman.changespeed(30, 0)  # 左キーを離すとY方向の速度をそのままにする
+              elif event.key == pygame.K_RIGHT:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(-60, 0)  # LSHIFTキーを押しながら右キーを離すとスピード減少
+                  else:
+                      Pacman.changespeed(-30, 0)  # 右キーを離すとY方向の速度をそのままにする
+              elif event.key == pygame.K_UP:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(0, 60)  # LSHIFTキーを押しながら上キーを離すとスピード減少
+                  else:
+                      Pacman.changespeed(0, 30)  # 上キーを離すとX方向の速度をそのままにする
+              elif event.key == pygame.K_DOWN:
+                  if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                      Pacman.changespeed(0, -60)  # LSHIFTキーを押しながら下キーを離すとスピード減少
+                  else:
+                      Pacman.changespeed(0, -30)  # 下キーを離すとX方向の速度をそのままにする
 
               if event.key == pygame.K_t:  #Tキーが押されたときの処理（テレポート）
                   while True:
                      Pacman.teleport(screen.get_width(), screen.get_height())  #テレポート位置を画面の幅と高さのランダムな位置に指定
                      pac_collide = pygame.sprite.spritecollide(Pacman, wall_list, False)  #pacmanと壁の衝突判定
                      pg_collide = pygame.sprite.spritecollide(Pacman, gate, False)  #pacmanと扉の衝突判定
-                     if (not pac_collide) and (not pg_collide):  #壁と扉に当たっていなければbreak、そうでなければ繰り返す
+                     pghost_collide = pygame.sprite.spritecollide(Pacman, monsta_list, False) 
+                     if (not pac_collide) and (not pg_collide) and (not pghost_collide):  #壁と扉とゴーストに当たっていなければbreak、そうでなければ繰り返す
                         break
 
               if event.key == pygame.K_SPACE:
@@ -588,16 +642,7 @@ def startGame():
                     stop_life = 50           #stop_lifeを50にする
 
 
-          if event.type == pygame.KEYUP:
-              if event.key == pygame.K_LEFT:
-                  Pacman.changespeed(30,0)
-              if event.key == pygame.K_RIGHT:
-                  Pacman.changespeed(-30,0)
-              if event.key == pygame.K_UP:
-                  Pacman.changespeed(0,30)
-              if event.key == pygame.K_DOWN:
-                  Pacman.changespeed(0,-30)
-          
+
       # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
    
       # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
